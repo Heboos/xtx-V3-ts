@@ -3,13 +3,19 @@
 </script>
 
 <template>
-<div>
+<div class="box">
   <h1>
     xiaotuxian
   </h1>
 </div>
 
 </template>
-<style>
-
+<style lang="less" scoped>
+.box {
+  width: 200px;
+  height: 200px;
+  background-color: #ccc;
+  color: @xtxColor;
+  .hoverShadow()
+}
 </style>
