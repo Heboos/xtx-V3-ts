@@ -4,4 +4,12 @@ import App from './App.vue'
 import 'normalize.css'
 // 导入全局样式
 import '@/assets/styles/common.less'
-createApp(App).mount('#app')
+import router from '@/router/index'
+// 导入pinia
+import { createPinia } from 'pinia'
+const app = createApp(App)
+// 路由
+app.use(router)
+// pinia
+app.use(createPinia())
+app.mount('#app')
