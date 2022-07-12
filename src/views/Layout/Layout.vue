@@ -1,13 +1,32 @@
-<script setup lang='ts'>
-
-
+<script setup lang="ts">
+import AppTopnav from './components/AppTopnav.vue'
+import AppHeader from './components/AppHeader.vue'
+import AppFooter from './components/AppFooter.vue'
+import AppHeaderSticky from './components/AppHeaderSticky.vue'
+import useStore from '@/store/index'
+const { category } = useStore()
+category.getAllCategory()
 </script>
 
 <template>
-  <AppTopnav></AppTopnav>
-  <AppHeader></AppHeader>
+  <!-- 1. 顶部通栏 -->
+    <app-topnav></app-topnav>
+  <!-- 2. 头部导航 -->
+    <app-header></app-header>
+  <!-- 3. 主体部分 -->
+  <!-- 吸顶 -->
+  <app-header-sticky></app-header-sticky>
+    <main class="app-body">
+      <!-- 路由出口 -->
+      <router-view></router-view>
+    </main>
+
+  <!-- 4. 底部部分 -->
+  <AppFooter></AppFooter>
 </template>
 
 <style lang='less' scoped>
-
+.app-body {
+  min-height: 600px;
+}
 </style>
