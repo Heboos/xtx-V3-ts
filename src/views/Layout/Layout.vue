@@ -4,7 +4,6 @@ import AppHeader from './components/AppHeader.vue'
 import AppFooter from './components/AppFooter.vue'
 import AppHeaderSticky from './components/AppHeaderSticky.vue'
 import useStore from '@/store/index'
-import XtxSkeleton from '@/components/XtxSkeleton/XtxSkeleton.vue'
 const { category } = useStore()
 category.getAllCategory()
 </script>
@@ -19,7 +18,6 @@ category.getAllCategory()
   <app-header-sticky></app-header-sticky>
   <!-- 路由出口 -->
   <router-view></router-view>
-  <XtxSkeleton :height="300"  bg="#ccc" :width="800" animated fade></XtxSkeleton>
   <!-- 4. 底部部分 -->
   <AppFooter></AppFooter>
 </template>

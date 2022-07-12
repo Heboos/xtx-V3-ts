@@ -8,12 +8,30 @@ const { category } = useStore()
     <ul class="menu">
       <li v-for="item in category.list" :key="item.id">
         <RouterLink :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
-        <RouterLink
-          :to="`/category/sub/${sub.id}`"
-          v-for="sub in item.children?.slice(0, 2)"
-        >
-          {{ sub.name }}
-        </RouterLink>
+        <template v-if="item.children">
+          <RouterLink
+              :to="`/category/sub/${sub.id}`"
+              :key="sub.id"
+              v-for="sub in item.children?.slice(0, 2)"
+              >
+            {{ sub.name }}
+          </RouterLink>
+        </template>
+        <template v-else>
+          <XtxSkeleton
+            :width="60"
+            :height="18"
+            style="margin-right: 5px"
+            bg="rgba(255,255,255,0.2)"
+            animated
+            />
+          <XtxSkeleton
+            :width="50"
+            :height="18"
+            bg="rgba(255,255,255,0.2)"
+            animated
+            />
+        </template>
         <!-- 弹层 -->
         <div class="layer">
           <h4>分类推荐 <small>根据您的购买或浏览记录推荐</small></h4>
