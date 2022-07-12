@@ -1,17 +1,23 @@
 
 <script lang="ts" setup>
 import useStore from '@/store'
+import Carousel from '@/components/Carousel/index.vue';
 const { home } = useStore()
 home.getBannerList()
 </script>
 <template>
   <div class="home-banner">
-    <!-- 轮播图 -->
-    <p style="text-align: center;">我是轮播图</p>
+    <Carousel></Carousel>
   </div>
 </template>
 
 <style scoped lang="less">
+:deep(.carousel-btn.prev) {
+  left: 270px!important;
+}
+:deep(.carousel-indicator) {
+  padding-left: 250px;
+}
 .home-banner {
   width: 1240px;
   height: 450px;
