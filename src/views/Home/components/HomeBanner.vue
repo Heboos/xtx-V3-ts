@@ -1,5 +1,9 @@
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import useStore from '@/store'
+const { home } = useStore()
+home.getBannerList()
+</script>
 <template>
   <div class="home-banner">
     <!-- 轮播图 -->
