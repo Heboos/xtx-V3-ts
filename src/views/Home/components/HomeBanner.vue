@@ -1,13 +1,13 @@
 
 <script lang="ts" setup>
 import useStore from '@/store'
-import Carousel from '@/components/Carousel/index.vue';
+// import Carousel from '@/components/Carousel/index.vue'
 const { home } = useStore()
 home.getBannerList()
 </script>
 <template>
   <div class="home-banner">
-    <Carousel></Carousel>
+    <XtxCarousel :slides="home.bannerList"  autoPlay :duration="3000"></XtxCarousel>
   </div>
 </template>
 

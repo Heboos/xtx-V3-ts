@@ -1,47 +1,82 @@
 <script lang="ts" setup name="XtxCarousel">
-defineProps()
+import { BannerItem } from '@/types/data'
+import { onMounted, onUnmounted, PropType, ref } from 'vue'
+const props =  defineProps({
+  slides: {
+    type: Array as PropType<BannerItem[]>,
+    required: true,
+  },
+  autoPlay: {
+    type: Boolean,
+    default: false,
+  },
+  duration: {
+    type: Number,
+    default: 3000,
+  },
+})
+const active = ref(0)
+const prev = () => {
+  if (active.value <= 0) {
+    active.value = props.slides.length - 1
+  } else {
+    active.value--
+  }
+}
+
+const next = () => {
+  if (active.value >= props.slides.length - 1) {
+    active.value = 0
+  } else {
+    active.value++
+  }
+}
+
+const play = () => {
+  // 如果没有自动播放
+  if (!props.autoPlay) return
+  // 在ts中，使用定时器，window.setInterval
+  timer = window.setInterval(() => {
+    next()
+  }, props.duration)
+}
+const stop = () => {
+  clearInterval(timer)
+}
+
+let timer = -1
+// 自动播放
+onMounted(() => {
+  play()
+})
+
+onUnmounted(() => {
+  stop()
+})
+
 </script>
 
 <template>
-  <div class="xtx-carousel">
+  <div class="xtx-carousel" @mouseenter="stop" @mouseleave="play">
     <ul class="carousel-body">
-      <li class="carousel-item fade">
-        <RouterLink to="/">
+      <li class="carousel-item" :class="{ fade: active === index }" v-for="item,index in slides" :key="item.id">
+        <RouterLink :to="item.hrefUrl">
           <img
-            src="http://yjy-xiaotuxian-dev.oss-cn-beijing.aliyuncs.com/picture/2021-04-15/1ba86bcc-ae71-42a3-bc3e-37b662f7f07e.jpg"
+            :src="item.imgUrl"
             alt=""
           />
         </RouterLink>
       </li>
-      <li class="carousel-item">
-        <RouterLink to="/">
-          <img
-            src="http://yjy-xiaotuxian-dev.oss-cn-beijing.aliyuncs.com/picture/2021-04-15/1ba86bcc-ae71-42a3-bc3e-37b662f7f07e.jpg"
-            alt=""
-          />
-        </RouterLink>
-      </li>
-      <li class="carousel-item">
-        <RouterLink to="/">
-          <img
-            src="http://yjy-xiaotuxian-dev.oss-cn-beijing.aliyuncs.com/picture/2021-04-15/1ba86bcc-ae71-42a3-bc3e-37b662f7f07e.jpg"
-            alt=""
-          />
-        </RouterLink>
-      </li>
+      
     </ul>
-    <a href="javascript:;" class="carousel-btn prev"
+    <a href="javascript:;" class="carousel-btn prev" @click="prev"
       ><i class="iconfont icon-angle-left"></i
     ></a>
-    <a href="javascript:;" class="carousel-btn next"
+    <a href="javascript:;" class="carousel-btn next" @click="next"
       ><i class="iconfont icon-angle-right"></i
     ></a>
     <div class="carousel-indicator">
-      <span class="active"></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
+      <span v-for="item,index in slides" :key="item.id" :class="{ active: active === index }" @mouseenter="active = index"></span>
     </div>
   </div>
 </template>
