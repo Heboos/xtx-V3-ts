@@ -16,11 +16,8 @@ category.getAllCategory()
   <!-- 3. 主体部分 -->
   <!-- 吸顶 -->
   <app-header-sticky></app-header-sticky>
-    <main class="app-body">
-      <!-- 路由出口 -->
-      <router-view></router-view>
-    </main>
-
+  <!-- 路由出口 -->
+  <router-view></router-view>
   <!-- 4. 底部部分 -->
   <AppFooter></AppFooter>
 </template>
