@@ -1,25 +1,27 @@
 <script lang="ts" setup name="AppHeaderSticky">
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import AppHeaderNav from './AppHeaderNav.vue'
-const topY = ref(0)
-const onScroll = () => {
-  topY.value = document.documentElement.scrollTop
-}
-// 监听滚动事件
-window.addEventListener('scroll', onScroll)
-// 移除事件监听
-onMounted(() => {
-  window.addEventListener('scroll', onScroll)
-})
-// 添加事件监听
-onBeforeUnmount(() => {
-  window.removeEventListener('scroll', onScroll)
-})
+import { useWindowScroll } from '@vueuse/core'
+const { y } = useWindowScroll()
+// const topY = ref(0)
+// const onScroll = () => {
+//   topY.value = document.documentElement.scrollTop
+// }
+// // 监听滚动事件
+// window.addEventListener('scroll', onScroll)
+// // 添加事件监听
+// onMounted(() => {
+//   window.addEventListener('scroll', onScroll)
+// })
+// // 移除事件监听
+// onBeforeUnmount(() => {
+//   window.removeEventListener('scroll', onScroll)
+// })
 
 </script>
 
 <template>
-  <div class="app-header-sticky" :class="{show: topY>78}">
+  <div class="app-header-sticky" :class="{show: y>78}">
     <div class="container">
       <RouterLink class="logo" to="/" />
       <AppHeaderNav />
