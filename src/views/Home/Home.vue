@@ -2,6 +2,7 @@
 import HomeBanner from './components/HomeBanner.vue'
 import HomeCategory from './components/HomeCategory.vue'
 import HomeNew from './components/HomeNew.vue';
+import HomeHot from './components/HomeHot.vue';
 </script>
 
 <template>
@@ -19,6 +20,7 @@ import HomeNew from './components/HomeNew.vue';
         </template>
       </HomePanel> -->
       <HomeNew></HomeNew>
+      <HomeHot></HomeHot>
       <!-- <HomePanel title="人气推荐" sub-title="人气爆款 不容错过">
         1111
       </HomePanel> -->
