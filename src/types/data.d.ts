@@ -33,3 +33,11 @@ export type BannerItem = {
   imgUrl: string
   type: string
 }
+// 新鲜好物
+export interface GoodItem {
+  desc: string
+  id: string
+  name: string
+  picture: string
+  price: string
+}

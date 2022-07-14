@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import HomeBanner from './components/HomeBanner.vue'
 import HomeCategory from './components/HomeCategory.vue'
-import HomePanel from './components/HomePanel.vue';
+import HomeNew from './components/HomeNew.vue';
 </script>
 
 <template>
@@ -13,14 +13,15 @@ import HomePanel from './components/HomePanel.vue';
         <!-- banner轮播图 -->
         <HomeBanner />
       </div>
-      <HomePanel title="新鲜好物" sub-title="新鲜出炉 品质靠谱">
+      <!-- <HomePanel title="新鲜好物" sub-title="新鲜出炉 品质靠谱">
         <template #right>
           <XtxMore path="/"></XtxMore>
         </template>
-      </HomePanel>
-      <HomePanel title="人气推荐" sub-title="人气爆款 不容错过">
+      </HomePanel> -->
+      <HomeNew></HomeNew>
+      <!-- <HomePanel title="人气推荐" sub-title="人气爆款 不容错过">
         1111
-      </HomePanel>
+      </HomePanel> -->
     </div>
   </div>
 </template>
