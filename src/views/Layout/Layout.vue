@@ -4,6 +4,7 @@ import AppHeader from './components/AppHeader.vue'
 import AppFooter from './components/AppFooter.vue'
 import AppHeaderSticky from './components/AppHeaderSticky.vue'
 import useStore from '@/store/index'
+import XtxMore from '@/components/XtxMore/XtxMore.vue'
 const { category } = useStore()
 category.getAllCategory()
 </script>
