@@ -3,6 +3,7 @@ import HomePanel from './HomePanel.vue'
 import useStore from '@/store'
 import { useLazyData } from '@/utils/hooks'
 const { home } = useStore()
+// 数据懒加载
 const target = useLazyData(() => {
   home.getNewList()
 })
@@ -12,7 +13,8 @@ const target = useLazyData(() => {
     <HomePanel ref="target" title="新鲜好物" sub-title="新鲜出炉 品质靠谱">
       <template #right><XtxMore path="/" /></template>
       <!-- 面板内容 -->
-      <ul class="goods-list">
+      <Transition name="fade">
+        <ul class="goods-list" v-if="home.newGoodList.length > 0">
         <li v-for="item in home.newGoodList" :key="item.id">
           <RouterLink to="/">
             <img
@@ -23,7 +25,20 @@ const target = useLazyData(() => {
             <p class="price">&yen;{{ item.price }}</p>
           </RouterLink>
         </li>
-      </ul>
+        </ul>
+        <div class="home-skeleton" v-else>
+          <div
+            class="item"
+            v-for="i in 4"
+            :key="i"
+            :style="{ backgroundColor: '#f0f9f4' }"
+          >
+            <XtxSkeleton bg="#e4e4e4" fade animated :width="306" :height="306" />
+            <XtxSkeleton bg="#e4e4e4" fade animated :width="160" :height="24" />
+            <XtxSkeleton bg="#e4e4e4" fade animated :width="120" :height="24" />
+          </div>
+        </div>
+      </Transition>
     </HomePanel>
   </div>
 </template>
@@ -49,6 +64,19 @@ const target = useLazyData(() => {
     }
     .price {
       color: @priceColor;
+    }
+  }
+}
+.home-skeleton {
+  width: 1240px;
+  height: 406px;
+  display: flex;
+  justify-content: space-between;
+  .item {
+    width: 306px;
+    .xtx-skeleton ~ .xtx-skeleton {
+      display: block;
+      margin: 16px auto 0;
     }
   }
 }
