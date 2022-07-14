@@ -10,4 +10,6 @@ export default {
     app.component('XtxCarousel', XtxCarousel)
     app.component('XtxMore', XtxMore)
   }
+
+  
 }

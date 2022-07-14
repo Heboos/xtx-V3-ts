@@ -8,11 +8,14 @@ import router from '@/router/index'
 // 导入pinia
 import { createPinia } from 'pinia'
 import XtxUI from './components/index'
+import hDirective from './directives'
 const app = createApp(App)
 // 路由
 app.use(router)
 // 全局组件
 app.use(XtxUI)
+// 全局自定义指令
+app.use(hDirective)
 // pinia
 app.use(createPinia())
 app.mount('#app')

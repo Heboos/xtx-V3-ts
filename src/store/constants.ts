@@ -1,5 +1,5 @@
 // 顶级分类
-export const topCategory = [
+export const top = [
   '居家',
   '美食',
   '服饰',

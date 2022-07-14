@@ -2,8 +2,8 @@ import { ApiRes, CategoryItem } from '@/types/data'
 import request from '@/utils/request'
 import { defineStore } from 'pinia'
 
-import { topCategory } from '../constants'
-const topCategoryList = topCategory.map( item => ( { id: item, name: item } ) )
+import { top } from '../constants'
+const topCategoryList = top.map( item => ( { id: item, name: item } ) )
 export default defineStore('category', {
   state: () => ({
     list: topCategoryList as CategoryItem[]

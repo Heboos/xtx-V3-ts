@@ -1,18 +1,21 @@
 <script setup lang="ts">
   import useStore from '@/store'
+  import { useLazyData } from '@/utils/hooks';
   import HomePanel from './HomePanel.vue'
   const { home } = useStore()
-  home.getHotList()
+  const target = useLazyData(() => {
+    home.getHotList()
+  })
 </script>
 <template>
 <div class="home-new">
-  <HomePanel title="人气推荐" sub-title="人气爆款 不容错过">
+  <HomePanel ref="target" title="人气推荐" sub-title="人气爆款 不容错过">
     <template #right></template>
 <!-- 面板内容 -->
 <ul class="goods-list">
   <li v-for="i in home.hotGoodList" :key="i.id">
     <RouterLink to="/">
-      <img :src="i.picture" alt="">
+      <img v-lazy="i.picture" alt="">
       <p class="name ellipsis">{{i.title}}</p>
       <p class="price">{{i.alt}}</p>
     </RouterLink>
