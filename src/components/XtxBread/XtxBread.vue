@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 import { provide } from 'vue';
 
-const { separtor = '/' } =  defineProps<{ separtor: string }>()
+const { separtor = '/' } =  defineProps<{ separtor?: string }>()
 provide('separtor', separtor)
 </script>
 

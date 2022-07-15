@@ -7,7 +7,9 @@
 <template>
   <ul class="app-header-nav">
     <li class="home"><RouterLink to="/">首页</RouterLink></li>
-    <li v-for="item in category.list" :key="item.id"><a href="#">{{ item.name }}</a></li>
+    <li v-for="item in category.list" :key="item.id"><a href="#">
+      <RouterLink :to="'/category/'+ item.id">{{ item.name }}</RouterLink>
+    </a></li>
   </ul>
 </template>
 
@@ -27,6 +29,10 @@
       line-height: 32px;
       height: 32px;
       display: inline-block;
+      &:hover{ 
+        color: @xtxColor;
+        border-bottom: 1px solid @xtxColor;
+      }
     }
   }
 }

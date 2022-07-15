@@ -48,3 +48,11 @@ export interface HotGoods {
   title: string
   alt: string
 }
+
+// 顶级分类类型
+export type TopCategory = {
+  id: string
+  name: string
+  picture: string
+  children: CategoryItem[]
+}

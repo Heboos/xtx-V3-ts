@@ -3,6 +3,11 @@ import Layout from '@/views/Layout/Layout.vue'
 import Home from '@/views/Home/Home.vue'
 export default createRouter({
   history: createWebHashHistory() , 
+  scrollBehavior: () => {
+    return {
+      top: 0,
+    }
+  },
   routes:[
     {
       path: '/',
@@ -11,6 +16,10 @@ export default createRouter({
         {
           path: '', // 默认显示的应用
           component: Home 
+        },
+        {
+          path:'category/:id',
+          component: () => import('@/views/Category/Category.vue')
         }
       ]
     },
