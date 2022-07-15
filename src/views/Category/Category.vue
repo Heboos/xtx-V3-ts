@@ -33,10 +33,12 @@ watchEffect(() => {
         <h3>全部分类</h3>
         <ul>
           <li v-for="i in category.topCategory.children" :key="i.id">
-            <a href="javascript:;">
-              <img v-lazy="i.picture" >
-              <p>{{ i.name }}</p>
-            </a>
+            <router-link :to="'/goods/' + i.id">
+              <a href="javascript:;">
+                <img v-lazy="i.picture" >
+                <p>{{ i.name }}</p>
+              </a>
+            </router-link>
           </li>
         </ul>
       </div>

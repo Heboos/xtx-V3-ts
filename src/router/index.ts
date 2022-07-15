@@ -20,6 +20,10 @@ export default createRouter({
         {
           path:'category/:id',
           component: () => import('@/views/Category/Category.vue')
+        },
+        { 
+          path: '/goods/:id', 
+          component: () => import('@/views/Goods/Goods.vue')
         }
       ]
     },

@@ -38,9 +38,9 @@ const { category } = useStore()
           <ul>
             <!-- 内层循环 -->
             <li v-for="i in item.goods" :key="i.id">
-              <RouterLink to="/">
+              <RouterLink :to="'/goods/' + i.id">
                 <img :src="i.picture" alt="">
-                <div class="info">
+                <div class="info"> 
                   <p class="name ellipsis-2">{{i.name}}</p>
                   <p class="desc ellipsis">{{i.desc}}</p>
                   <p class="price"><i>¥</i>{{i.price}}</p>
