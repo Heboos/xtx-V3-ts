@@ -6,7 +6,9 @@ const { goods } = useStore()
 const route = useRoute()
 watchEffect(() => {
   const id = route.params.id as string
-  goods.getGoodsInfo(id)
+  if(route.fullPath === `/goods/${id}`) {
+    goods.getGoodsInfo(id)
+  }
 })
 
 </script>
