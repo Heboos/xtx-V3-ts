@@ -1,7 +1,11 @@
 <script lang="ts" setup>
 import useStore from '@/store'
-import { watchEffect } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
+import GoodsImage from './components/GoodsImage.vue';
+import GoodsSales from './components/GoodsSales.vue';
+import GoodsName from './components/GoodsName.vue';
+import GoodsSku from './components/GoodsSku.vue';
 const { goods } = useStore()
 const route = useRoute()
 watchEffect(() => {
@@ -10,11 +14,11 @@ watchEffect(() => {
     goods.getGoodsInfo(id)
   }
 })
-
+const num = ref(1)
 </script>
 
 <template>
-  <div class='xtx-goods-page'>
+  <div class='xtx-goods-page' >
     <div class="container">
       <!-- 面包屑 -->
     <XtxBread>
@@ -33,13 +37,18 @@ watchEffect(() => {
         <!--左边-->
         <div class="media">
           <!-- 区域1 商品图片组件 -->
+          <GoodsImage :images="goods.info.mainPictures"></GoodsImage>
           <!-- 区域2 商品销售信息组件 -->
+          <GoodsSales></GoodsSales>
         </div>
         <!--右边-->
         <div class="spec">
           <!-- 区域3 商品介绍组件 -->
+          <GoodsName :goods="goods.info"></GoodsName>
           <!-- 区域4 商品规格组件  -->
+          <GoodsSku :goods='goods.info'></GoodsSku>
           <!-- 区域5 数量选择组件 -->
+          <XtxNumber v-model="num" :min="1" :max="10"></XtxNumber>
           <!-- 加入购物车 按钮 -->
         </div>
       </div>

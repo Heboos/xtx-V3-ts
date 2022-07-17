@@ -19,10 +19,15 @@ export default createRouter({
         },
         {
           path:'category/:id',
-          component: () => import('@/views/Category/Category.vue')
+          component: () => import('@/views/Category/Category.vue'),
+
+        },
+        {
+          path:'category/sub/:id',
+          component: () => import('@/views/Category/Category.vue'),
         },
         { 
-          path: '/goods/:id', 
+          path: 'goods/:id', 
           component: () => import('@/views/Goods/Goods.vue')
         }
       ]

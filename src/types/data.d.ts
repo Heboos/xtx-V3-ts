@@ -60,6 +60,8 @@ export type TopCategory = {
 
 // 商品模块的类型声明
 export type GoodsInfo = {
+specs: any;
+skus: any;
   id: string
   name: string
   spuCode: string
@@ -82,5 +84,31 @@ export type GoodsInfo = {
   categories: {
     id: string
     name: string
+  }[]
+}
+
+// 商品的规格的值的类型
+export type SpecValue = {
+  desc: string
+  name: string
+  picture: string
+  selected: boolean
+  disabled: boolean
+}
+// 商品的规格类型
+export type Spec = {
+  name: string
+  values: SpecValue[]
+}
+
+export type Sku = {
+  id: string
+  inventory: number
+  oldPrice: string
+  price: string
+  skuCode: string
+  specs: {
+    name: string
+    valueName: string
   }[]
 }
