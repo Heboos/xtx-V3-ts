@@ -6,6 +6,9 @@ import GoodsImage from './components/GoodsImage.vue';
 import GoodsSales from './components/GoodsSales.vue';
 import GoodsName from './components/GoodsName.vue';
 import GoodsSku from './components/GoodsSku.vue';
+import GoodsDetail from './components/GoodsDetail.vue';
+import GoodsDetail1 from './components/GoodsDetail.vue';
+import GoodsHot from './components/GoodsHot.vue';
 const { goods } = useStore()
 const route = useRoute()
 watchEffect(() => {
@@ -61,12 +64,16 @@ const num = ref(1)
       <div class="goods-footer">
         <div class="goods-article">
           <!-- 商品+评价 -->
+          <GoodsDetail1 :goods="goods.info"></GoodsDetail1>
           <div class="goods-tabs">商品+评价</div>
           <!-- 注意事项 -->
           <div class="goods-warn">注意事项</div>
         </div>
         <!-- 24热榜+专题推荐 -->
-        <div class="goods-aside">24热榜+专题推荐</div>
+        <div class="goods-aside">
+          <GoodsHot type="1"></GoodsHot>
+          <GoodsHot type="2"></GoodsHot>
+        </div>
       </div>
     </div>
   </div>

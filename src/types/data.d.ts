@@ -84,7 +84,11 @@ skus: any;
   categories: {
     id: string
     name: string
-  }[]
+  }[],
+  details: {
+    "pictures": string [],
+    "properties": {"name": string,"value": string}[]
+  }
 }
 
 // 商品的规格的值的类型
