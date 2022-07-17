@@ -50,6 +50,7 @@ const num = ref(1)
           <!-- 区域5 数量选择组件 -->
           <XtxNumber v-model="num" :min="1" :max="10"></XtxNumber>
           <!-- 加入购物车 按钮 -->
+          <XtxButton type="primary" style="margin-top: 20px">加入购物车</XtxButton>
         </div>
       </div>
       <!-- 商品推荐 -->
