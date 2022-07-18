@@ -4,6 +4,7 @@ import useStore from '@/store/index'
 import { useRouter } from 'vue-router';
 import { useField, useForm } from 'vee-validate'
 import { AxiosError } from 'axios';
+import { useCountDown } from '@/utils/hooks';
 const { validate, resetForm } = useForm({
   validationSchema: {
     account(value: string) {
@@ -72,9 +73,8 @@ const changeType = (newValue: 'account' | 'mobile'  ) => {
 // 用户点击了  发送验证码
 // 1. 校验手机号
 // 2. 
+const {counter, start} = useCountDown()
 const mobileRef = ref<HTMLInputElement | null>(null)
-const time = ref(0)
-let timer = -1
 const send = async() => {
   const res = await validateMobile()
   if (!res.valid) {
@@ -85,27 +85,19 @@ const send = async() => {
   // console.log('发送验证码')
   try {
     await user.sendMobileMsg(mobile.value)
-    alert('ok')
+    start(10)
+    // alert('ok')
+
   } catch(error: any) {
         // 对响应错误做点什么
     if (!error.response) {
       console.log('网络错误')
-      
     }
-
     if (error.response && error.response.data) {
       console.log(error.response.data.message)
     }
     return Promise.reject(error)
   }
-    // 开启倒计时
-  time.value = 60
-  timer = window.setInterval(() => {
-    time.value--
-    if (time.value === 0) {
-      clearInterval(timer)
-    }
-  }, 1000)
 }
 </script>
 <template>
@@ -154,7 +146,7 @@ const send = async() => {
           <div class="input">
             <i class="iconfont icon-code"></i>
             <input v-model="code" type="password" placeholder="请输入验证码" />
-            <span class="code" @click="send">{{ time === 0 ? '发送验证码' : `${time}s后发送` }}</span>
+            <span class="code" @click="send">{{ counter === 0 ? '发送验证码' : counter+'秒之后再试' }}</span>
           </div>
           <div class="error" v-if="codeError">
             <i class="iconfont icon-warning" />{{ codeError }}
