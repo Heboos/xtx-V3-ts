@@ -1,15 +1,94 @@
 <script lang="ts" setup name="LoginForm">
-import { ref } from 'vue'
-
+import { ref, watch } from 'vue'
+import useStore from '@/store/index'
+import { useRouter } from 'vue-router';
+import { useField, useForm } from 'vee-validate'
+const { validate, resetForm } = useForm({
+  validationSchema: {
+    account(value: string) {
+      if (!value) return '请输入用户名'
+      if (!/^[a-zA-Z]\w{5,19}$/.test(value)) return '字母开头且6-20个字符'
+      return true
+    },
+    password: (value: string) => {
+      if (!value) return '请输入密码'
+      if (!/^\w{6,12}$/.test(value)) return '密码必须是6-24位字符'
+      return true
+    },
+    isAgree: (value: boolean) => {
+      if (!value) return '请同意隐私条款'
+      return true
+    },
+    mobile: (value: string) => {
+      if (!value) return '请输入手机号'
+      if (!/^1[3-9]\d{9}$/.test(value)) return '手机号格式错误'
+      return true
+    },
+    code: (value: string) => {
+      if (!value) return '请输入验证码'
+      if (!/^\d{6}$/.test(value)) return '验证码格式错误'
+      return true
+    },
+  },
+    initialValues: {
+    mobile: '13666666666',
+    code: '123456',
+    account: 'xiaotuxian001',
+    password: '123456',
+    isAgree: true
+  }
+})
+const { value: account, errorMessage: accountError } = useField('account')
+const { value: password, errorMessage: passwordError } = useField<string>('password')
+const { value: isAgree, errorMessage: isAgreeError } = useField<boolean>('isAgree')
+const { value: mobile, errorMessage: mobileError, validate:validateMobile } = useField<boolean>('mobile')
+const { value: code, errorMessage: codeError } = useField<boolean>('code')
+const { user } = useStore()
+const form = ref({
+  account: 'xiaotuxian001',
+  password: '123456',
+  isAgree: false,
+  
+})
+const router = useRouter()
 const type = ref<'account' | 'mobile'>('account')
+// const isAgree = ref<true | false>(false)
+const login = async() => {
+  try {
+    const res = await validate()
+    if(!res.valid) return
+    user.login({account: form.value.account, password: form.value.password})
+    router.push('/')
+  }catch(err){
+    console.log(err)
+    
+  }
+}
+const changeType = (newValue: 'account' | 'mobile'  ) => {
+  type.value = newValue
+  resetForm()
+}
+// 用户点击了  发送验证码
+// 1. 校验手机号
+// 2. 
+const mobileRef = ref<HTMLInputElement | null>(null)
+const send = async() => {
+  const res = await validateMobile()
+  if (!res.valid) {
+    // 校验没通过
+    mobileRef.value?.focus()
+    return
+  }
+  console.log('发送验证码')
+}
 </script>
 <template>
   <div class="account-box">
     <div class="toggle">
-      <a href="javascript:;" @click="type = 'account'" v-if="type === 'mobile'">
+      <a href="javascript:;" @click="changeType('account')" v-if="type === 'mobile'">
         <i class="iconfont icon-user"></i> 使用账号登录
       </a>
-      <a href="javascript:;" @click="type = 'mobile'" v-else>
+      <a href="javascript:;" @click="changeType('mobile')"  v-else>
         <i class="iconfont icon-msg"></i> 使用短信登录
       </a>
     </div>
@@ -18,14 +97,20 @@ const type = ref<'account' | 'mobile'>('account')
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-user"></i>
-            <input type="text" placeholder="请输入用户名或手机号" />
+            <input v-model="account" type="text" placeholder="请输入用户名或手机号" />
+          </div>
+          <div class="error" v-if="accountError">
+            <i class="iconfont icon-warning" />{{ accountError }}
           </div>
           <!-- <div class="error"><i class="iconfont icon-warning" />请输入手机号</div> -->
         </div>
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-lock"></i>
-            <input type="password" placeholder="请输入密码" />
+            <input v-model="password" type="password" placeholder="请输入密码" />
+          </div>
+          <div class="error" v-if="passwordError">
+            <i class="iconfont icon-warning" />{{ passwordError }}
           </div>
         </div>
       </template>
@@ -33,27 +118,36 @@ const type = ref<'account' | 'mobile'>('account')
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-user"></i>
-            <input type="text" placeholder="请输入手机号" />
+            <input v-model="mobile" ref="mobileRef" type="text" placeholder="请输入手机号" />
+          </div>
+          <div class="error" v-if="mobileError">
+            <i class="iconfont icon-warning" />{{ mobileError }}
           </div>
         </div>
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-code"></i>
-            <input type="password" placeholder="请输入验证码" />
-            <span class="code">发送验证码</span>
+            <input v-model="code" type="password" placeholder="请输入验证码" />
+            <span class="code" @click="send">发送验证码</span>
+          </div>
+          <div class="error" v-if="codeError">
+            <i class="iconfont icon-warning" />{{ codeError }}
           </div>
         </div>
       </template>
       <div class="form-item">
         <div class="agree">
-         
-          <span>我已同意</span>
+          <XtxCheckbox v-model="isAgree">我已同意</XtxCheckbox>
+          <!-- <span>我已同意</span> -->
           <a href="javascript:;">《隐私条款》</a>
           <span>和</span>
           <a href="javascript:;">《服务条款》</a>
         </div>
+        <div class="error" v-if="isAgreeError">
+          <i class="iconfont icon-warning" />{{ isAgreeError }}
+        </div>
       </div>
-      <a href="javascript:;" class="btn">登录</a>
+      <a href="javascript:;" class="btn" @click="login">登录</a>
     </div>
     <div class="action">
       <img

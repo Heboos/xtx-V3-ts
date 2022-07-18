@@ -116,3 +116,17 @@ export type Sku = {
     valueName: string
   }[]
 }
+// 登录
+export interface Profile {
+  id: string
+  account: string
+  mobile: string
+  token: string
+  avatar: string
+  nickname: string
+  gender: string
+  birthday?: string
+  cityCode: string
+  provinceCode: string
+  profession: string
+}

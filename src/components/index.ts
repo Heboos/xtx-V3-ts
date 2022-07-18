@@ -6,6 +6,8 @@ import XtxBread from './XtxBread/XtxBread.vue'
 import XtxBreadItem from './XtxBread/XtxBreadItem.vue'
 import XtxNumber from './XtxNumber/XtxNumber.vue'
 import XtxButton from './XtxButton/XtxButton.vue'
+import XtxCheckbox from './XtxCheckbox/XtxCheckbox.vue'
+import XtxMessage from './XtxMessage/XtxMessage.vue'
 // App 是在vue库中定义好的类型
 import { App } from 'vue'
 export default {
@@ -17,6 +19,8 @@ export default {
     app.component('XtxBreadItem', XtxBreadItem)
     app.component('XtxNumber', XtxNumber)
     app.component('XtxButton', XtxButton)
+    app.component('XtxCheckbox', XtxCheckbox)
+    app.component('XtxMessage', XtxMessage)
   }
 
   
