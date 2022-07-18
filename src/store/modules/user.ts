@@ -18,5 +18,14 @@ export default defineStore({
       // 1. 保存用户信息到 state 中
       this.profile = res.data.result
     },
-  },
+    async sendMobileMsg(mobile: string) {
+      const res = await request.get('/login/code', {
+        params: {
+          mobile
+        }
+      })
+      console.log(res.data)
+      
+    }
+  }
 })

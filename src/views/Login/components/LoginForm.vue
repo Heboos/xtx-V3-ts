@@ -3,6 +3,7 @@ import { ref, watch } from 'vue'
 import useStore from '@/store/index'
 import { useRouter } from 'vue-router';
 import { useField, useForm } from 'vee-validate'
+import { AxiosError } from 'axios';
 const { validate, resetForm } = useForm({
   validationSchema: {
     account(value: string) {
@@ -41,8 +42,8 @@ const { validate, resetForm } = useForm({
 const { value: account, errorMessage: accountError } = useField('account')
 const { value: password, errorMessage: passwordError } = useField<string>('password')
 const { value: isAgree, errorMessage: isAgreeError } = useField<boolean>('isAgree')
-const { value: mobile, errorMessage: mobileError, validate:validateMobile } = useField<boolean>('mobile')
-const { value: code, errorMessage: codeError } = useField<boolean>('code')
+const { value: mobile, errorMessage: mobileError, validate:validateMobile } = useField<string>('mobile')
+const { value: code, errorMessage: codeError } = useField<string>('code')
 const { user } = useStore()
 const form = ref({
   account: 'xiaotuxian001',
@@ -72,6 +73,8 @@ const changeType = (newValue: 'account' | 'mobile'  ) => {
 // 1. 校验手机号
 // 2. 
 const mobileRef = ref<HTMLInputElement | null>(null)
+const time = ref(0)
+let timer = -1
 const send = async() => {
   const res = await validateMobile()
   if (!res.valid) {
@@ -79,7 +82,30 @@ const send = async() => {
     mobileRef.value?.focus()
     return
   }
-  console.log('发送验证码')
+  // console.log('发送验证码')
+  try {
+    await user.sendMobileMsg(mobile.value)
+    alert('ok')
+  } catch(error: any) {
+        // 对响应错误做点什么
+    if (!error.response) {
+      console.log('网络错误')
+      
+    }
+
+    if (error.response && error.response.data) {
+      console.log(error.response.data.message)
+    }
+    return Promise.reject(error)
+  }
+    // 开启倒计时
+  time.value = 60
+  timer = window.setInterval(() => {
+    time.value--
+    if (time.value === 0) {
+      clearInterval(timer)
+    }
+  }, 1000)
 }
 </script>
 <template>
@@ -128,7 +154,7 @@ const send = async() => {
           <div class="input">
             <i class="iconfont icon-code"></i>
             <input v-model="code" type="password" placeholder="请输入验证码" />
-            <span class="code" @click="send">发送验证码</span>
+            <span class="code" @click="send">{{ time === 0 ? '发送验证码' : `${time}s后发送` }}</span>
           </div>
           <div class="error" v-if="codeError">
             <i class="iconfont icon-warning" />{{ codeError }}
