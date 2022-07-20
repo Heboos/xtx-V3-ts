@@ -1,5 +1,6 @@
 import { ApiRes } from '@/types/data'
 import { Profile } from '@/types/data'
+import { getProfile, removeProfile, setProfile } from '@/utils/profile'
 import request from '@/utils/request'
 import { defineStore } from 'pinia'
 
@@ -8,7 +9,7 @@ export default defineStore({
   // 状态
   state: () => ({
     // 用户信息
-    profile: {} as Profile,
+    profile: getProfile() || {} as Profile,
   }),
   // 方法
   actions: {
@@ -17,6 +18,7 @@ export default defineStore({
       const res = await request.post<ApiRes<Profile>>('/login', data)
       // 1. 保存用户信息到 state 中
       this.profile = res.data.result
+      setProfile(res.data.result)
     },
     async sendMobileMsg(mobile: string) {
       const res = await request.get('/login/code', {
@@ -26,6 +28,19 @@ export default defineStore({
       })
       console.log(res.data)
       
+    },
+    async mobileLogin(mobile: string, code: string) {
+      const res = await request.post<ApiRes<Profile>>('/login/code', {
+        mobile,
+        code
+      })
+      // 1. 保存用户信息到 state 中
+      this.profile = res.data.result
+      setProfile(res.data.result)
+    },
+    logout() {
+      this.profile = {} as Profile
+      removeProfile()
     }
   }
 })

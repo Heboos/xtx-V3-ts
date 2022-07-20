@@ -33,34 +33,42 @@ const { validate, resetForm } = useForm({
     },
   },
     initialValues: {
-    mobile: '13666666666',
+    mobile: '13899999999',
     code: '123456',
     account: 'xiaotuxian001',
     password: '123456',
     isAgree: true
   }
 })
-const { value: account, errorMessage: accountError } = useField('account')
+const { value: account, errorMessage: accountError } = useField<string>('account')
 const { value: password, errorMessage: passwordError } = useField<string>('password')
 const { value: isAgree, errorMessage: isAgreeError } = useField<boolean>('isAgree')
 const { value: mobile, errorMessage: mobileError, validate:validateMobile } = useField<string>('mobile')
 const { value: code, errorMessage: codeError } = useField<string>('code')
 const { user } = useStore()
-const form = ref({
-  account: 'xiaotuxian001',
-  password: '123456',
-  isAgree: false,
+// const form = ref({
+//   account: 'xiaotuxian001',
+//   password: '123456',
+//   isAgree: false,
   
-})
+// })
 const router = useRouter()
 const type = ref<'account' | 'mobile'>('account')
 // const isAgree = ref<true | false>(false)
 const login = async() => {
   try {
     const res = await validate()
-    if(!res.valid) return
-    user.login({account: form.value.account, password: form.value.password})
+  if (type.value === 'account') {
+    // 如果表单校验通过
+    if (res.errors.account || res.errors.password || res.errors.isAgree) return
+    await user.login({account:account.value, password:password.value})
     router.push('/')
+  } else {
+    if (res.errors.mobile || res.errors.code || res.errors.isAgree) return
+    await user.mobileLogin(mobile.value, code.value)
+    router.push('/')
+  }
+    
   }catch(err){
     console.log(err)
     
