@@ -35,6 +35,10 @@ export default createRouter({
     {
       path: '/login',
       component: () => import('@/views/Login/Login.vue')
+    },
+    {
+      path: '/login/callback',
+      component: () => import('@/views/Login/Callback.vue')
     }
   ]
 })
