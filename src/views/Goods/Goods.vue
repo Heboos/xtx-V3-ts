@@ -9,6 +9,7 @@ import GoodsSku from './components/GoodsSku.vue';
 import GoodsDetail from './components/GoodsDetail.vue';
 import GoodsDetail1 from './components/GoodsDetail.vue';
 import GoodsHot from './components/GoodsHot.vue';
+import Message from '@/components/XtxMessage';
 const { goods } = useStore()
 const route = useRoute()
 watchEffect(() => {
@@ -18,6 +19,30 @@ watchEffect(() => {
   }
 })
 const num = ref(1)
+
+const skuId = ref('')
+const changeSku = (id: string) => {
+  skuId.value = id
+  const sku = goods.info.skus.find((it:any) => it.id === skuId.value)
+  console.log(sku);
+  
+  if (sku) {
+    goods.info.price = sku.price
+    goods.info.oldPrice = sku.oldPrice
+    goods.info.inventory = sku.inventory
+  }
+}
+
+const addCart = () => {
+  // 判断是否是完整的sku
+  if (!skuId.value) {
+    return Message.warning('请选择完整信息')
+  }
+  if ( num.value <= 0 ) {
+    return Message.warning('商品数量不能为0')
+  }
+  console.log('加入购物车')
+}
 </script>
 
 <template>
@@ -49,11 +74,11 @@ const num = ref(1)
           <!-- 区域3 商品介绍组件 -->
           <GoodsName :goods="goods.info"></GoodsName>
           <!-- 区域4 商品规格组件  -->
-          <GoodsSku :goods='goods.info'></GoodsSku>
+          <GoodsSku :goods='goods.info' @change-sku="changeSku"></GoodsSku>
           <!-- 区域5 数量选择组件 -->
-          <XtxNumber v-model="num" :min="1" :max="10"></XtxNumber>
+          <XtxNumber v-model="num" :min="1" :max=goods.info.inventory></XtxNumber>
           <!-- 加入购物车 按钮 -->
-          <XtxButton type="primary" style="margin-top: 20px">加入购物车</XtxButton>
+          <XtxButton type="primary" style="margin-top: 20px" @click="addCart">加入购物车</XtxButton>
         </div>
       </div>
       <!-- 商品推荐 -->
