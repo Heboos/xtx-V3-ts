@@ -1,29 +1,90 @@
-<script name="CallbackBind" lang="ts" setup></script>
+<script name="CallbackBind" lang="ts" setup>
+import useStore from '@/store';
+import { QQUserInfo, QQUserInfoRes } from '@/types/data';
+import { useCountDown } from '@/utils/hooks';
+import { mobileRule, codeRule } from '@/utils/validate';
+import { useField, useForm } from 'vee-validate';
+import { ref } from 'vue';
+
+const { user } = useStore()
+const qqUserInfo = ref<QQUserInfo>({} as QQUserInfo)
+
+let opendId = ''
+// 1. 获取当前QQ用户的信息
+if(QC.Login.check()){
+  QC.api("get_user_info").success((res: QQUserInfoRes) => {
+    console.log(res)
+    qqUserInfo.value = res.data
+  })
+
+  QC.Login.getMe(id => {
+    console.log('拿到的openId', id)
+    opendId = id
+  })
+}
+const { counter, start } =  useCountDown()
+// const mobile = ref('13899999999')
+// const code = ref('123456')
+const { validate } = useForm({
+  validationSchema: {
+    // 手机号
+    mobile: mobileRule,
+    // 手机号
+    code: codeRule
+  },
+  initialValues: {
+    mobile: '13899999999',
+    code: '123456'
+  }
+})
+
+const { value: mobile, errorMessage:mobileError, validate: mobileValidate } = useField<string>('mobile')
+const { value: code, errorMessage:codeError } = useField<string>('code')
+
+// 用户发送验证码
+const send = async () => {
+  await user.sendQQBindMsg(mobile.value)
+  start(10)
+}
+
+// 用户将当前登录的QQ和已有的账号进行绑定
+const bind = async () => {
+  const { valid } = await validate()
+  if(!valid) return
+  await user.qqBindLogin(opendId, mobile.value, code.value)
+
+  alert('绑定成功')
+}
+</script>
 <template>
   <div class="xtx-form">
     <div class="user-info">
-      <img
-        src="http://qzapp.qlogo.cn/qzapp/101941968/57C7969540F9D3532451374AA127EE5B/50"
-        alt=""
-      />
-      <p>Hi，Tom 欢迎来小兔鲜，完成绑定后可以QQ账号一键登录哦~</p>
+      <img :src="qqUserInfo.figureurl_2" alt="" />
+      <p>
+        Hi，{{ qqUserInfo.nickname }}
+        欢迎来小兔鲜，完成绑定后可以QQ账号一键登录哦~
+      </p>
     </div>
     <div class="xtx-form-item">
       <div class="field">
         <i class="icon iconfont icon-phone"></i>
-        <input class="input" type="text" placeholder="绑定的手机号" />
+        <input class="input" v-model="mobile" type="text" placeholder="绑定的手机号" />
       </div>
-      <div class="error"></div>
+      <div class="error" v-if="mobileError">
+        <i class="iconfont icon-warning" />{{mobileError}}
+      </div>
     </div>
     <div class="xtx-form-item">
       <div class="field">
         <i class="icon iconfont icon-code"></i>
-        <input class="input" type="text" placeholder="短信验证码" />
-        <span class="code">发送验证码</span>
+        <input class="input" v-model="code" type="text" placeholder="短信验证码" />
+        <span class="code" @click="send">{{counter===0?'发送验证码': counter+'秒之后发送' }}</span>
       </div>
-      <div class="error"></div>
+      <div class="error" v-if="codeError">
+        <i class="iconfont icon-warning" />{{codeError}}
+      </div>
     </div>
-    <a href="javascript:;" class="submit">立即绑定</a>
+    <a href="javascript:;" class="submit" @click="bind">立即绑定</a>
   </div>
 </template>
 

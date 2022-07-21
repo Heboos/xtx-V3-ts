@@ -4,7 +4,25 @@ import LoginFooter from './components/LoginFooter.vue'
 import { ref } from 'vue'
 import CallbackBind from './components/CallbackBind.vue';
 import CallbackPatch from './components/CallbackPatch.vue';
+import useStore from '@/store';
+import { useRouter } from 'vue-router';
 const hasAccount = ref(true)
+const { user } = useStore()
+const router = useRouter()
+// 1. 判断用户是否登录
+if (QC.Login.check()) {
+  // 2. 获取openId
+  QC.Login.getMe((openId) => {
+    user.qqLogin(openId)
+  })
+}
+QC.Login.getMe(async (openId) => {
+    // 使用openId去做登录
+    user.qqLogin(openId)
+    await user.qqLogin(openId)
+    alert('登录成功')
+    router.push('/')
+  })
 </script>
 
 <template>
