@@ -1,3 +1,4 @@
+import user from '@/store/modules/user'
 import axios from 'axios'
 
 // 备用接口地址: http://pcapi-xiaotuxian-front-devtest.itheima.net/
@@ -12,6 +13,15 @@ const instance = axios.create({
 instance.interceptors.request.use(
   function (config) {
     // 在发送请求之前做些什么
+    // 补充token
+    const userInfo = user()
+    const token = userInfo.profile.token
+    if(token) {
+      // 添加到请求头
+      console.log(token)
+      // config.headers!  : 告诉ts，config中一定有headers
+      config.headers!.Authorization = `Bearer ${token}`
+    }
     return config
   },
   function (error) {

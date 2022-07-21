@@ -10,7 +10,8 @@ import GoodsDetail from './components/GoodsDetail.vue';
 import GoodsDetail1 from './components/GoodsDetail.vue';
 import GoodsHot from './components/GoodsHot.vue';
 import Message from '@/components/XtxMessage';
-const { goods } = useStore()
+import category from '@/store/modules/category';
+const { goods, cart } = useStore()
 const route = useRoute()
 watchEffect(() => {
   const id = route.params.id as string
@@ -41,7 +42,7 @@ const addCart = () => {
   if ( num.value <= 0 ) {
     return Message.warning('商品数量不能为0')
   }
-  console.log('加入购物车')
+  cart.addCart({skuId:skuId.value, count: num.value})
 }
 </script>
 
