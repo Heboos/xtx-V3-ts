@@ -18,7 +18,7 @@ instance.interceptors.request.use(
     const token = userInfo.profile.token
     if(token) {
       // 添加到请求头
-      console.log(token)
+      // console.log(token)
       // config.headers!  : 告诉ts，config中一定有headers
       config.headers!.Authorization = `Bearer ${token}`
     }

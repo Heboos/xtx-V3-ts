@@ -29,6 +29,10 @@ export default createRouter({
         { 
           path: 'goods/:id', 
           component: () => import('@/views/Goods/Goods.vue')
+        },
+        { 
+          path: 'cart', 
+          component: () => import('@/views/Cart/Cart.vue')
         }
       ]
     },

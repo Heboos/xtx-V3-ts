@@ -1,5 +1,5 @@
 <script lang="ts" setup name="XtxNumbox">
-  const { modelValue, min = 0, max = 10 } = defineProps<{
+  const { modelValue, min = 1, max = 10 } = defineProps<{
     modelValue:number,
     min?:number,
     max?:number

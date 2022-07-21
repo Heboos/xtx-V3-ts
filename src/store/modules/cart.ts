@@ -28,11 +28,61 @@ const useCartStore = defineStore('cart', {
     return this.effectiveList
       .reduce((sum, item) => sum + item.count * Number(item.nowPrice), 0)
       .toFixed(2)
+  },
+  // 是否全选
+  isAllSelected(): boolean {
+    return (
+      this.effectiveList.length !== 0 &&
+      this.effectiveList.every((item) => item.selected)
+    )
+  },
+  // 已选择的列表
+  selectedList(): CartItem[] {
+    return this.effectiveList.filter((item) => item.selected)
+  },
+  // 已选择的商品总数
+  selectedListCounts(): number {
+    return this.selectedList.reduce((sum, item) => sum + item.count, 0)
+  },
+  // 已选择的列表总价
+  selectedListPrice(): string {
+    return this.selectedList
+      .reduce((sum, item) => sum + item.count * Number(item.nowPrice), 0)
+      .toFixed(2)
   }
   },
   // 方法
   actions: {
-        // 获取购物车列表
+    clearCart() {
+      // 退出登录需清空购物车
+      this.list = [] as CartItem[];
+    },
+    // 修改全选或者全不选
+    async updateCartAllSelected(isSelected: boolean) {
+      await request.put('/member/cart/selected', {
+        selected: isSelected,
+      })
+      // 获取购物车列表
+      this.getCartList()
+    },
+    // 修改购物车商品
+    async updateCart(
+      skuId: string,
+      data: { selected?: boolean; count?: number }
+    ) {
+      await request.put(`/member/cart/${skuId}`, data)
+      // 重新获取最新购物车列表
+      this.getCartList()
+    },
+    // 删除购物车商品
+    async delCart(skuIds: string[]) {
+      await request.delete('/member/cart', {
+        data: { ids: skuIds }
+      })
+      // 重新获取最新购物车列表
+      this.getCartList()
+    },
+    // 获取购物车列表
     async getCartList() {
       const res = await request.get<ApiRes<CartItem[]>>('/member/cart')
       this.list = res.data.result
@@ -40,6 +90,7 @@ const useCartStore = defineStore('cart', {
     async addCart(data: { skuId: string; count: number }) {
       const res = await request.post<ApiRes<{msg:string}>>('/member/cart', data)
       // console.log(res.data.msg)
+      this.getCartList()
       Message.success(res.data.msg)
     }
   },

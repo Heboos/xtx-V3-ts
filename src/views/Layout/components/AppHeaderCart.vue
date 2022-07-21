@@ -1,16 +1,19 @@
 <script setup lang="ts" name="AppHeaderCart">
 import useStore from '@/store';
+import { useRoute, useRouter } from 'vue-router';
 
   const { cart } = useStore()
   cart.getCartList()
+  const router = useRouter()
+  const route = useRoute()
 </script>
 
 <template>
   <div class="cart">
-    <a class="curr" href="javascript:;">
+    <a class="curr" href="javascript:;" @click="router.push('/cart')">
       <i class="iconfont icon-cart"></i><em>{{ cart.effectiveListCounts }}</em>
     </a>
-    <div class="layer">
+    <div class="layer" v-show="cart.effectiveList.length && route.path !== '/cart'">
       <div class="list">
         <div class="item" v-for="it in cart.list" :key="it.id">
           <RouterLink to="">
@@ -29,7 +32,7 @@ import useStore from '@/store';
               <p class="count">x{{ it.count }}</p>
             </div>
           </RouterLink>
-          <i class="iconfont icon-close-new"></i>
+          <i class="iconfont icon-close-new" @click="cart.delCart([it.skuId])"></i>
         </div>
       </div>
       <div class="foot">
@@ -37,7 +40,7 @@ import useStore from '@/store';
           <p>{{ cart.effectiveListCounts }}</p>
           <p>&yen;{{ cart.effectiveListPrice }}</p>
         </div>
-        <XtxButton type="plain">去购物车结算</XtxButton>
+        <XtxButton type="plain" @click="router.push('/cart')">去购物车结算</XtxButton>
       </div>
     </div>
   </div>
