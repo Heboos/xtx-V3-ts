@@ -1,11 +1,14 @@
 <script lang="ts" setup name="XtxMessage">
-import { PropType } from 'vue'
+import { onMounted, PropType, ref } from 'vue'
 
 defineProps({
   type: {
     type: String as PropType<'success' | 'error' | 'warning'>,
     default: 'success',
   },
+  text: {
+    type: String
+  }
 })
 
 // 定义一个对象，包含三种情况的样式，对象key就是类型字符串
@@ -29,16 +32,37 @@ const style = {
     borderColor: 'rgb(225, 243, 216)',
   },
 }
+const isShow = ref(false)
+onMounted(() => {
+  isShow.value = true
+} )
 </script>
 
 <template>
-  <div class="xtx-message" :style="style[type]">
-    <i class="iconfont" :class="style[type].icon"></i>
-    <span class="text"><slot></slot></span>
-  </div>
+  <Transition name="down">
+    <div class="xtx-message" :style="style[type]" v-show="isShow">
+      <i class="iconfont" :class="style[type].icon"></i>
+      <span class="text">{{ text }}</span>
+    </div>
+  </Transition>
 </template>
 
 <style scoped lang="less">
+.down {
+  &-enter {
+    &-from {
+      transform: translate3d(0, -75px, 0);
+      opacity: 0;
+    }
+    &-active {
+      transition: all 0.5s;
+    }
+    &-to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+}
 .xtx-message {
   width: 300px;
   height: 50px;
