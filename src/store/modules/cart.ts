@@ -12,7 +12,24 @@ const useCartStore = defineStore('cart', {
     }
   },
   // 计算
-  getters: {},
+  getters: {
+  // 有效商品列表 
+  // 背景业务：有效商品对应的isEffective = true  filter
+  effectiveList(): CartItem[] {
+    return this.list.filter((item) => item.stock > 0 && item.isEffective)
+  },
+    // 有效商品总数量
+  // 把effctiveList中的每一项的count叠加起来
+  effectiveListCounts(): number {
+    return this.effectiveList.reduce((sum, item) => sum + item.count, 0)
+  },
+  // 总钱数  = 所有单项的钱数累加  单项的钱数 = 数量 * 单价
+  effectiveListPrice(): string {
+    return this.effectiveList
+      .reduce((sum, item) => sum + item.count * Number(item.nowPrice), 0)
+      .toFixed(2)
+  }
+  },
   // 方法
   actions: {
         // 获取购物车列表
