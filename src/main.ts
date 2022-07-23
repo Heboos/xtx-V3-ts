@@ -9,6 +9,9 @@ import router from '@/router/index'
 import { createPinia } from 'pinia'
 import XtxUI from './components/index'
 import hDirective from './directives'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
 const app = createApp(App)
 // 路由
 app.use(router)

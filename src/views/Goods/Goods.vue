@@ -11,6 +11,7 @@ import GoodsDetail1 from './components/GoodsDetail.vue';
 import GoodsHot from './components/GoodsHot.vue';
 import Message from '@/components/XtxMessage';
 import category from '@/store/modules/category';
+import { CartItem } from '@/types/data';
 const { goods, cart } = useStore()
 const route = useRoute()
 watchEffect(() => {
@@ -20,13 +21,15 @@ watchEffect(() => {
   }
 })
 const num = ref(1)
-
+  const attrsText = ref('')
 const skuId = ref('')
 const changeSku = (id: string) => {
   skuId.value = id
   const sku = goods.info.skus.find((it:any) => it.id === skuId.value)
   console.log(sku);
-  
+  attrsText.value =  sku.specs
+    .map((it:any) => it.name + ':' + it.valueName)
+    .join(' ')
   if (sku) {
     goods.info.price = sku.price
     goods.info.oldPrice = sku.oldPrice
@@ -42,7 +45,24 @@ const addCart = () => {
   if ( num.value <= 0 ) {
     return Message.warning('商品数量不能为0')
   }
-  cart.addCart({skuId:skuId.value, count: num.value})
+  if(cart.isLogin) {
+    cart.addCart({skuId:skuId.value, count: num.value} as CartItem)
+  } else {
+    cart.addCart({
+    // 本地添加
+    id: goods.info.id,
+    name: goods.info.name,
+    picture: goods.info.mainPictures[0],
+    price: goods.info.price,
+    count: num.value,
+    skuId: skuId.value,
+    attrsText: attrsText.value,
+    selected: true,
+    nowPrice: goods.info.price,
+    stock: goods.info.inventory,
+    isEffective: true,
+  } as CartItem)
+  }
 }
 </script>
 
